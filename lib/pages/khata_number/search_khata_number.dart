@@ -1,0 +1,513 @@
+import 'package:bhulekh_up/app_configs/app_asset.dart';
+import 'package:bhulekh_up/app_configs/app_colors.dart';
+import 'package:bhulekh_up/app_configs/app_decorations.dart';
+import 'package:bhulekh_up/app_configs/app_validators.dart';
+import 'package:bhulekh_up/data_models/district.dart';
+import 'package:bhulekh_up/data_models/fasli_year.dart';
+import 'package:bhulekh_up/data_models/tehsil.dart';
+import 'package:bhulekh_up/data_models/village.dart';
+import 'package:bhulekh_up/pages/khata_number/controller/fasil_controller.dart';
+import 'package:bhulekh_up/pages/khata_number/controller/khasraNum_controller.dart';
+import 'package:bhulekh_up/pages/khata_number/controller/khata_controller.dart';
+import 'package:bhulekh_up/pages/khata_number/khata_number_page.dart';
+import 'package:bhulekh_up/utils/snackbar_helper.dart';
+import 'package:bhulekh_up/widgets/app_buttons/app_primary_button.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+
+class SearchKhataNumber extends StatefulWidget {
+  static const routeName = "/searchkhataNumber";
+
+  const SearchKhataNumber({super.key});
+
+  @override
+  State<SearchKhataNumber> createState() => _SearchKhataNumberState();
+}
+
+class _SearchKhataNumberState extends State<SearchKhataNumber> {
+  List<FasliYear> fasliYears = [];
+  FasliYear? selectedFasliYear;
+  late FasliController fasliController;
+  late KhataController khataController;
+  late KhasraNumController khasraNumController;
+  late Village villageData;
+  late District districtData;
+  late Tehsil tehsilData;
+
+  @override
+  void initState() {
+    super.initState();
+    fasliController = Get.isRegistered<FasliController>()
+        ? Get.find<FasliController>()
+        : Get.put(FasliController());
+    khataController = Get.isRegistered<KhataController>()
+        ? Get.find<KhataController>()
+        : Get.put(KhataController());
+    khasraNumController = Get.isRegistered<KhasraNumController>()
+        ? Get.find<KhasraNumController>()
+        : Get.put(KhasraNumController());
+    final map = Get.arguments as Map<String, dynamic>?;
+    if (map != null) {
+      villageData = map['villageData'];
+      districtData = map['districtData'];
+      tehsilData = map['tehsilData'];
+    }
+    fasliController.selectedVillage = villageData;
+    fasliController.getFasliYear();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    Get.delete<FasliController>(force: true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF355495),
+        leading: InkWell(
+          onTap: () {
+            Get.back();
+          },
+          child: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Column(
+              children: [
+                const SizedBox(height: 6),
+                Container(
+                  width: Get.width,
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                      color: Colors.blueAccent.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(12)),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          child: const Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                "जनपद : ",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Color(0xFF355495),
+                                ),
+                              ),
+                              Text(
+                                "तहसील : ",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Color(0xFF355495),
+                                ),
+                              ),
+                              Text(
+                                "ग्राम : ",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Color(0xFF355495),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                districtData.districtName,
+                                style: const TextStyle(
+                                    fontSize: 20, color: Colors.white),
+                              ),
+                              Text(
+                                tehsilData.tehsilName,
+                                style: const TextStyle(
+                                    fontSize: 20, color: Colors.white),
+                              ),
+                              Text(
+                                villageData.vname,
+                                style: const TextStyle(
+                                    fontSize: 20, color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                fasliController.obx(
+                  (state) => Container(
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    child: DropdownButtonFormField(
+                      decoration:
+                          AppDecorations.textFieldOutlinedDecoration().copyWith(
+                        hintText: "फसली बर्ष चुनें।",
+                      ),
+                      isExpanded: true,
+                      icon: SvgPicture.asset(AppAssets.dropDownArrow),
+                      items: fasliController.fasilYearList?.map((val) {
+                        return DropdownMenuItem(
+                          value: val,
+                          child: Text(
+                            val.fasliYear == "999"
+                                ? "वर्तमान फसली"
+                                : val.fasliYear,
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        );
+                      }).toList(),
+                      value: fasliController.selectedFasliYear,
+                      onSaved: fasliController.onFasliYearSaved,
+                      onChanged: (FasliYear? v) {
+                        if (v != null) {
+                          fasliController.onFasliYearSaved(v);
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Row(
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                      child: Text(
+                        "किसी एक को चुनें :",
+                        style: TextStyle(
+                            color: Color(0xFF355495),
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+                RadioListTile(
+                  activeColor: const Color(0xFF355495),
+                  value: 1,
+                  groupValue: khataController.channelType,
+                  onChanged: (v) {
+                    setState(() {
+                      khataController.channelType = 1;
+                    });
+                  },
+                  title: const Text("खसरा/गाटा संख्या द्वारा खोजें"),
+                ),
+                RadioListTile(
+                  activeColor: const Color(0xFF355495),
+                  value: 2,
+                  groupValue: khataController.channelType,
+                  onChanged: (v) {
+                    setState(() {
+                      khataController.channelType = 2;
+                    });
+                  },
+                  title: const Text("खाता संख्या द्वारा खोजें"),
+                ),
+                RadioListTile(
+                  activeColor: const Color(0xFF355495),
+                  value: 3,
+                  groupValue: khataController.channelType,
+                  onChanged: (v) {
+                    setState(() {
+                      khataController.channelType = 3;
+                    });
+                  },
+                  title: const Text("खातेदार के नाम द्वारा खोजें"),
+                ),
+                RadioListTile(
+                  activeColor: const Color(0xFF355495),
+                  value: 4,
+                  groupValue: khataController.channelType,
+                  onChanged: (v) {
+                    setState(() {
+                      khataController.channelType = 4;
+                    });
+                  },
+                  title: const Text("नामांतरण दिनांक से खोजें"),
+                ),
+                khataController.channelType == 1
+                    ? Column(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
+                            child: TextFormField(
+                              onSaved: khataController.onKcnSaved,
+                              controller: khasraNumController.kcnTextController,
+                              keyboardType: TextInputType.number,
+                              textCapitalization: TextCapitalization.words,
+                              decoration:
+                                  AppDecorations.textFieldOutlinedDecoration()
+                                      .copyWith(
+                                          hintText: "खसरा/गाटा संख्या भरें..."),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
+                            child: AppPrimaryButton(
+                              key: khasraNumController.buttonKey,
+                              color: const Color(0xFF355495),
+                              onPressed: () {
+                                if (fasliController.selectedFasliYear == null) {
+                                  SnackBarHelper.show("फसली वर्ष चुनें !");
+                                } else {
+                                  khasraNumController.getKhataNumberByKsrNbr();
+                                }
+                              },
+                              child: const Text("खोजें"),
+                            ),
+                          ),
+                        ],
+                      )
+                    : const SizedBox(),
+                khataController.channelType == 2
+                    ? Column(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
+                            child: TextFormField(
+                              controller:
+                                  khataController.acNumberTextController,
+                              keyboardType: TextInputType.number,
+                              textCapitalization: TextCapitalization.words,
+                              decoration:
+                                  AppDecorations.textFieldOutlinedDecoration()
+                                      .copyWith(
+                                          hintText: "खाता संख्या भरें..."),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
+                            child: AppPrimaryButton(
+                              key: khataController.buttonKey,
+                              color: const Color(0xFF355495),
+                              onPressed: () {
+                                if (fasliController.selectedFasliYear == null) {
+                                  SnackBarHelper.show("फसली वर्ष चुनें !");
+                                } else {
+                                  khataController.enterKhataNumber();
+                                }
+                              },
+                              child: const Text("खोजें"),
+                            ),
+                          ),
+                        ],
+                      )
+                    : const SizedBox(),
+                khataController.channelType == 3
+                    ? Column(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
+                            child: TextFormField(
+                              onSaved: khataController.onNameSaved,
+                              keyboardType: TextInputType.name,
+                              controller: khataController.nameController,
+                              textCapitalization: TextCapitalization.words,
+                              decoration:
+                                  AppDecorations.textFieldOutlinedDecoration()
+                                      .copyWith(hintText: "नाम भरें ..."),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
+                            child: AppPrimaryButton(
+                              key: khataController.buttonKey2,
+                              color: const Color(0xFF355495),
+                              onPressed: () {
+                                if (fasliController.selectedFasliYear == null) {
+                                  SnackBarHelper.show("फसली वर्ष चुनें !");
+                                } else {
+                                  khataController.getKhataNumberByName();
+                                }
+                              },
+                              child: const Text("खोजें"),
+                            ),
+                          ),
+                        ],
+                      )
+                    : const SizedBox(),
+                khataController.channelType == 4
+                    ? Column(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
+                            child: FormField<DateTime>(
+                                validator: (data) =>
+                                    AppFormValidators.validateDob(data),
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                builder: (FormFieldState<DateTime> state) =>
+                                    Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Material(
+                                            color: Colors.transparent,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              side: const BorderSide(
+                                                color: AppColors.divider,
+                                                width: 1.2,
+                                              ),
+                                            ),
+                                            clipBehavior: Clip.antiAlias,
+                                            child: InkWell(
+                                              onTap: () async {
+                                                FocusScope.of(context)
+                                                    .unfocus();
+                                                final now = DateTime.now()
+                                                    .subtract((365 * 14).days);
+                                                final date =
+                                                    await showDatePicker(
+                                                        context: context,
+                                                        firstDate: DateTime(
+                                                            1800, 1, 1, 1, 1),
+                                                        lastDate: now,
+                                                        initialDate: now);
+                                                if (date != null) {
+                                                  state.didChange(date);
+                                                }
+                                              },
+                                              child: SizedBox(
+                                                width: double.infinity,
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .fromLTRB(
+                                                                20, 18, 8, 18),
+                                                        child:
+                                                            state.value == null
+                                                                ? const Text(
+                                                                    '(YYYY-DD-MM)',
+                                                                    style: TextStyle(
+                                                                        color: AppColors
+                                                                            .subtitleGrey,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w500,
+                                                                        fontSize:
+                                                                            16),
+                                                                  )
+                                                                : Text(
+                                                                    DateFormat(
+                                                                            'yyyy-MM-dd')
+                                                                        .format(
+                                                                            state.value!),
+                                                                    style: const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w500,
+                                                                        fontSize:
+                                                                            16),
+                                                                  ),
+                                                      ),
+                                                    ),
+                                                    const Icon(
+                                                      Icons
+                                                          .calendar_month_rounded,
+                                                      color: Color(0xFF355495),
+                                                    ),
+                                                    const SizedBox(width: 16),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          if (state.hasError)
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 18,
+                                                      vertical: 6),
+                                              child: Text('${state.errorText}',
+                                                  style: TextStyle(
+                                                      color: Get.theme
+                                                          .colorScheme.error)),
+                                            )
+                                        ])),
+                          ),
+                          const SizedBox(height: 12),
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
+                            child: AppPrimaryButton(
+                              color: const Color(0xFF355495),
+                              onPressed: () {
+                                Get.dialog(SimpleDialog(
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        const Text(
+                                          "No Data Found",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        const SizedBox(height: 5),
+                                        const Text(
+                                          "(कोई डेटा मौजूद नहीं)",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        SizedBox(
+                                          width: 60,
+                                          height: 40,
+                                          child: AppPrimaryButton(
+                                            color: const Color(0xFF355495),
+                                            onPressed: () {
+                                              Get.back();
+                                            },
+                                            child: const Text("Ok"),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ));
+                              },
+                              child: const Text("खोजें"),
+                            ),
+                          ),
+                        ],
+                      )
+                    : const SizedBox(),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
