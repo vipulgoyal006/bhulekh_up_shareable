@@ -55,6 +55,7 @@ class KhataController extends GetxController with StateMixin<List<KhataName>> {
         "act": "sbname",
         "vcc": fasliController.selectedVillage.villageCodeCensus,
         "fasli-code-value": fasliController.selectedFasliYear!.fasliYear,
+        "fasli-name-value": fasliController.selectedFasliYear!.fasliYear,
       });
       final response = await formData.send();
       if (response.statusCode == 200) {
@@ -110,19 +111,29 @@ class KhataController extends GetxController with StateMixin<List<KhataName>> {
     }
   }
 
+  String addLeadingZeros(String input, int desiredLength) {
+    if (input.length >= desiredLength) {
+      return input; // No need to add zeros, already long enough.
+    } else {
+      int zerosToAdd = desiredLength - input.length;
+      return '0' * zerosToAdd + input;
+    }
+  }
+
   Future<void> enterKhataNumber() async {
     try {
+      String result = addLeadingZeros(acNumberTextController.text, 5);
       buttonKey.currentState?.showLoader();
       final url = Uri.parse(
           'https://upbhulekh.gov.in/public/public_ror/action/public_action.jsp');
       final formData = http.MultipartRequest('POST', url);
 
       formData.fields.addAll({
-        "acn": acNumberTextController.text,
-        "display_acn": "401",
+        "acn": result,
         "act": "sbacn",
         "vcc": fasliController.selectedVillage.villageCodeCensus,
         "fasli-code-value": fasliController.selectedFasliYear!.fasliYear,
+        "fasli-name-value": fasliController.selectedFasliYear!.fasliYear,
       });
       final response = await formData.send();
       if (response.statusCode == 200) {

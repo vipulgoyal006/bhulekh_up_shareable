@@ -1,4 +1,4 @@
-package com.example.bhulekh_up
+package com.bhulekh_up
 
 import io.flutter.embedding.android.FlutterActivity
 

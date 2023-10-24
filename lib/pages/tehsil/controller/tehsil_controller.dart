@@ -16,7 +16,6 @@ class TehsilController extends GetxController with StateMixin<List<Tehsil>> {
 
   Future<void> getTehsil() async {
     try {
-      print("object ${selectedDistrict.districtCodeCensus}");
       change(null, status: RxStatus.loading());
       final url = Uri.parse(
           'https://upbhulekh.gov.in/public/public_ror/action/public_action.jsp');

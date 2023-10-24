@@ -23,6 +23,7 @@ class FasliController extends GetxController with StateMixin<List<FasliYear>> {
 
   Future<void> getFasliYear() async {
     try {
+      print("villageCode ${selectedVillage.villageCodeCensus}");
       change(null, status: RxStatus.loading());
       final url = Uri.parse(
           'https://upbhulekh.gov.in/public/public_ror/action/public_action.jsp');

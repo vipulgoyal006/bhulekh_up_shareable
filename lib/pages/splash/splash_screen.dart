@@ -31,8 +31,8 @@ class _SplashPageState extends State<SplashPage> {
           Positioned.fill(
             child: Center(
               child: Image.asset(
-                AppAssets.mainLogoP,
-                height: 300,
+                AppAssets.mainLogo,
+                height: 200,
               ),
             ),
           ),

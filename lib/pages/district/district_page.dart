@@ -1,8 +1,10 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:bhulekh_up/app_configs/app_asset.dart';
 import 'package:bhulekh_up/pages/district/controller/district_controller.dart';
 import 'package:bhulekh_up/pages/district/widgets/district_tile.dart';
 import 'package:bhulekh_up/widgets/app_error_widget.dart';
 import 'package:bhulekh_up/widgets/app_loader.dart';
+import 'package:bhulekh_up/widgets/sponsered_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -36,6 +38,7 @@ class _DistrictPageState extends State<DistrictPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: SponsoredSection(size: AdmobBannerSize.BANNER),
       body: SingleChildScrollView(
         child: Column(
           children: [

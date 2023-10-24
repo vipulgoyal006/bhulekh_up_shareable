@@ -1,7 +1,7 @@
 name: bhulekh_up
 description: A new Flutter project.
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: '>=3.1.0 <4.0.0'
@@ -20,6 +20,8 @@ dependencies:
   http: ^1.1.0
   fluttertoast: ^8.0.8
   webview_flutter: ^2.0.13
+  admob_flutter: ^3.0.0
+
 
 dev_dependencies:
   flutter_test:

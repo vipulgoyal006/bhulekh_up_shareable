@@ -48,6 +48,7 @@ class KhasraNumController extends GetxController
         "act": "sbksn",
         "vcc": fasliController.selectedVillage.villageCodeCensus,
         "fasli-code-value": fasliController.selectedFasliYear!.fasliYear,
+        "fasli-name-value": fasliController.selectedFasliYear!.fasliYear,
       });
       final response = await formData.send();
 

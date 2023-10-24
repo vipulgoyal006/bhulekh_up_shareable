@@ -1,3 +1,4 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:bhulekh_up/app_configs/app_asset.dart';
 import 'package:bhulekh_up/app_configs/app_colors.dart';
 import 'package:bhulekh_up/app_configs/app_decorations.dart';
@@ -9,9 +10,9 @@ import 'package:bhulekh_up/data_models/village.dart';
 import 'package:bhulekh_up/pages/khata_number/controller/fasil_controller.dart';
 import 'package:bhulekh_up/pages/khata_number/controller/khasraNum_controller.dart';
 import 'package:bhulekh_up/pages/khata_number/controller/khata_controller.dart';
-import 'package:bhulekh_up/pages/khata_number/khata_number_page.dart';
 import 'package:bhulekh_up/utils/snackbar_helper.dart';
 import 'package:bhulekh_up/widgets/app_buttons/app_primary_button.dart';
+import 'package:bhulekh_up/widgets/sponsered_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -67,6 +68,7 @@ class _SearchKhataNumberState extends State<SearchKhataNumber> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: SponsoredSection(size: AdmobBannerSize.BANNER),
       appBar: AppBar(
         backgroundColor: const Color(0xFF355495),
         leading: InkWell(
@@ -87,7 +89,7 @@ class _SearchKhataNumberState extends State<SearchKhataNumber> {
                   margin:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                      color: Colors.blueAccent.withOpacity(0.5),
+                      color: const Color(0xFF355495),
                       borderRadius: BorderRadius.circular(12)),
                   child: Row(
                     children: [
@@ -100,21 +102,24 @@ class _SearchKhataNumberState extends State<SearchKhataNumber> {
                                 "जनपद : ",
                                 style: TextStyle(
                                   fontSize: 20,
-                                  color: Color(0xFF355495),
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
                                 ),
                               ),
                               Text(
                                 "तहसील : ",
                                 style: TextStyle(
                                   fontSize: 20,
-                                  color: Color(0xFF355495),
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
                                 ),
                               ),
                               Text(
                                 "ग्राम : ",
                                 style: TextStyle(
                                   fontSize: 20,
-                                  color: Color(0xFF355495),
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
                                 ),
                               ),
                             ],
@@ -155,7 +160,7 @@ class _SearchKhataNumberState extends State<SearchKhataNumber> {
                     child: DropdownButtonFormField(
                       decoration:
                           AppDecorations.textFieldOutlinedDecoration().copyWith(
-                        hintText: "फसली बर्ष चुनें।",
+                        hintText: "फसली वर्ष चुनें।",
                       ),
                       isExpanded: true,
                       icon: SvgPicture.asset(AppAssets.dropDownArrow),

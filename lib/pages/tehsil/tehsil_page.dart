@@ -1,9 +1,11 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:bhulekh_up/app_configs/app_asset.dart';
 import 'package:bhulekh_up/data_models/district.dart';
 import 'package:bhulekh_up/data_models/tehsil.dart';
 import 'package:bhulekh_up/pages/tehsil/controller/tehsil_controller.dart';
 import 'package:bhulekh_up/pages/tehsil/widget/tehsil_tile.dart';
 import 'package:bhulekh_up/widgets/app_loader.dart';
+import 'package:bhulekh_up/widgets/sponsered_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -40,6 +42,7 @@ class _TehsilPageState extends State<TehsilPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: SponsoredSection(size: AdmobBannerSize.BANNER),
       body: SingleChildScrollView(
         child: Column(
           children: [
