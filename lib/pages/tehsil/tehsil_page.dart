@@ -1,14 +1,14 @@
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:bhulekh_up/app_configs/app_asset.dart';
 import 'package:bhulekh_up/data_models/district.dart';
 import 'package:bhulekh_up/data_models/tehsil.dart';
 import 'package:bhulekh_up/pages/tehsil/controller/tehsil_controller.dart';
 import 'package:bhulekh_up/pages/tehsil/widget/tehsil_tile.dart';
+import 'package:bhulekh_up/widgets/ad_mob_services.dart';
 import 'package:bhulekh_up/widgets/app_loader.dart';
-import 'package:bhulekh_up/widgets/sponsered_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class TehsilPage extends StatefulWidget {
   static const routeName = "/tehsilPage";
@@ -24,6 +24,7 @@ class TehsilPage extends StatefulWidget {
 class _TehsilPageState extends State<TehsilPage> {
   late TehsilController controller;
   late District districtData;
+  BannerAd? _banner;
 
   @override
   void initState() {
@@ -37,12 +38,30 @@ class _TehsilPageState extends State<TehsilPage> {
         : Get.put<TehsilController>(TehsilController(), permanent: true);
     controller.selectedDistrict = districtData;
     controller.getTehsil();
+    _createBannerAd();
+  }
+
+  void _createBannerAd() {
+    _banner = BannerAd(
+        size: AdSize.banner,
+        adUnitId: AdMobService.bannerAdUnitId!,
+        listener: AdMobService.bannerAdListener,
+        request: const AdRequest(nonPersonalizedAds: false))
+      ..load();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: SponsoredSection(size: AdmobBannerSize.BANNER),
+      bottomNavigationBar: _banner == null
+          ? const SizedBox()
+          : Container(
+              height: 52,
+              margin: const EdgeInsets.only(bottom: 12),
+              child: AdWidget(
+                ad: _banner!,
+              ),
+            ),
       body: SingleChildScrollView(
         child: Column(
           children: [

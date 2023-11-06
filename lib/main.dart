@@ -1,16 +1,16 @@
 import 'dart:io';
 
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:bhulekh_up/app_configs/app_pages_routes.dart';
 import 'package:bhulekh_up/pages/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_portal/flutter_portal.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
-  Admob.initialize();
+  MobileAds.instance.initialize();
   runApp(const MyApp());
 }
 

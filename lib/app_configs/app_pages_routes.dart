@@ -1,3 +1,4 @@
+import 'package:bhulekh_up/pages/captcha/get_captcha.dart';
 import 'package:bhulekh_up/pages/district/district_page.dart';
 import 'package:bhulekh_up/pages/khata_number/khasra_numebr.dart';
 import 'package:bhulekh_up/pages/khata_number/khata_number_page.dart';
@@ -48,6 +49,11 @@ class AppPages {
             name: KhasraNumberPage.routeName,
             participatesInRootNavigator: true,
             page: () => const KhasraNumberPage(),
+          ),
+          GetPage(
+            name: EnterCaptchaPage.routeName,
+            participatesInRootNavigator: true,
+            page: () => const EnterCaptchaPage(),
           ),
         ])
   ];

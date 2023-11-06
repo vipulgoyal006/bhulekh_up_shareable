@@ -1,7 +1,5 @@
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:bhulekh_up/data_models/khasra_num.dart';
 import 'package:bhulekh_up/data_models/khataName.dart';
-import 'package:bhulekh_up/data_models/khata_number.dart';
 import 'package:bhulekh_up/pages/khata_number/controller/fasil_controller.dart';
 import 'package:bhulekh_up/pages/report_page/html_view_page.dart';
 import 'package:bhulekh_up/pages/tehsil/controller/tehsil_controller.dart';
@@ -16,21 +14,6 @@ class ReportController extends GetxController {
   late TehsilController tehsilController;
   late VillageController villageController;
   late FasliController fasliController;
-  late AdmobInterstitial interstitialAd;
-
-  void setupInterstitialAd() {
-    interstitialAd = AdmobInterstitial(
-      nonPersonalizedAds: false,
-      adUnitId: 'ca-app-pub-2451593635555466/3655872694',
-      listener: (AdmobAdEvent event, Map<String, dynamic>? args) {
-        if (event == AdmobAdEvent.closed) {
-          Get.toNamed(HtmlViewPage.routeName);
-        }
-      },
-    );
-    // Load the interstitial ad.
-    interstitialAd.load();
-  }
 
   @override
   void onInit() {
@@ -65,7 +48,7 @@ class ReportController extends GetxController {
     if (response.statusCode == 200) {
       htmlResponse.value = response.body;
       if (htmlResponse.isNotEmpty) {
-        setupInterstitialAd();
+        Get.toNamed(HtmlViewPage.routeName);
       } else {
         Get.dialog(SimpleDialog(
           children: [
@@ -122,7 +105,7 @@ class ReportController extends GetxController {
     if (response.statusCode == 200) {
       htmlResponse.value = response.body;
       if (htmlResponse.isNotEmpty) {
-        setupInterstitialAd();
+        Get.toNamed(HtmlViewPage.routeName);
       } else {
         Get.dialog(SimpleDialog(
           children: [

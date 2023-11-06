@@ -1,4 +1,5 @@
 import 'package:bhulekh_up/data_models/khasra_num.dart';
+import 'package:bhulekh_up/pages/captcha/controller/captcha_controller.dart';
 import 'package:bhulekh_up/pages/report_page/controller/report_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,12 +11,14 @@ class KhasraNumberTile extends StatelessWidget {
   }) : super(key: key);
   final KhasraNumRes data;
   final controller = Get.put(ReportController());
+  final captchaController = Get.put(CaptchaController());
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        controller.fetchKhasraReport(data);
+        // controller.fetchKhasraReport(data);
+        captchaController.fetchCaptchCode(data);
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),

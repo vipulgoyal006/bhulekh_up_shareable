@@ -1,4 +1,3 @@
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:bhulekh_up/app_configs/app_asset.dart';
 import 'package:bhulekh_up/app_configs/app_colors.dart';
 import 'package:bhulekh_up/app_configs/app_decorations.dart';
@@ -11,11 +10,12 @@ import 'package:bhulekh_up/pages/khata_number/controller/fasil_controller.dart';
 import 'package:bhulekh_up/pages/khata_number/controller/khasraNum_controller.dart';
 import 'package:bhulekh_up/pages/khata_number/controller/khata_controller.dart';
 import 'package:bhulekh_up/utils/snackbar_helper.dart';
+import 'package:bhulekh_up/widgets/ad_mob_services.dart';
 import 'package:bhulekh_up/widgets/app_buttons/app_primary_button.dart';
-import 'package:bhulekh_up/widgets/sponsered_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 
 class SearchKhataNumber extends StatefulWidget {
@@ -36,6 +36,8 @@ class _SearchKhataNumberState extends State<SearchKhataNumber> {
   late Village villageData;
   late District districtData;
   late Tehsil tehsilData;
+  BannerAd? _banner;
+  InterstitialAd? _interstitialAd;
 
   @override
   void initState() {
@@ -57,6 +59,8 @@ class _SearchKhataNumberState extends State<SearchKhataNumber> {
     }
     fasliController.selectedVillage = villageData;
     fasliController.getFasliYear();
+    _createBannerAd();
+    _showInterstitialAd();
   }
 
   @override
@@ -65,10 +69,51 @@ class _SearchKhataNumberState extends State<SearchKhataNumber> {
     Get.delete<FasliController>(force: true);
   }
 
+  void _createBannerAd() {
+    _banner = BannerAd(
+        size: AdSize.banner,
+        adUnitId: AdMobService.bannerAdUnitId!,
+        listener: AdMobService.bannerAdListener,
+        request: const AdRequest())
+      ..load();
+  }
+
+  void _createInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId: AdMobService.interstitialUnitAdId!,
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+            onAdLoaded: (ad) => _interstitialAd = ad,
+            onAdFailedToLoad: (LoadAdError error) => _interstitialAd = null));
+  }
+
+  void _showInterstitialAd() {
+    if (_interstitialAd != null) {
+      _interstitialAd!.fullScreenContentCallback =
+          FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
+        ad.dispose();
+        _createInterstitialAd();
+      }, onAdFailedToShowFullScreenContent: (ad, error) {
+        ad.dispose();
+        _createInterstitialAd();
+      });
+      _interstitialAd!.show();
+      _interstitialAd = null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: SponsoredSection(size: AdmobBannerSize.BANNER),
+      bottomNavigationBar: _banner == null
+          ? const SizedBox()
+          : Container(
+              height: 52,
+              margin: const EdgeInsets.only(bottom: 12),
+              child: AdWidget(
+                ad: _banner!,
+              ),
+            ),
       appBar: AppBar(
         backgroundColor: const Color(0xFF355495),
         leading: InkWell(

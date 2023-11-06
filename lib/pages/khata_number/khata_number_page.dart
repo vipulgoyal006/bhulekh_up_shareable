@@ -1,9 +1,7 @@
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:bhulekh_up/pages/khata_number/controller/khata_controller.dart';
 import 'package:bhulekh_up/pages/khata_number/widget/khata_number_tile.dart';
 import 'package:bhulekh_up/widgets/app_error_widget.dart';
 import 'package:bhulekh_up/widgets/app_loader.dart';
-import 'package:bhulekh_up/widgets/sponsered_section.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -30,7 +28,6 @@ class _KhataNumberPageState extends State<KhataNumberPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: SponsoredSection(size: AdmobBannerSize.BANNER),
       appBar: AppBar(
         backgroundColor: const Color(0xFF476ABB),
         leading: InkWell(

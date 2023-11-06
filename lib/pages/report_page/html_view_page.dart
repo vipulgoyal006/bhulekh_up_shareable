@@ -16,6 +16,7 @@ class HtmlViewPage extends StatefulWidget {
 
 class _HtmlViewPageState extends State<HtmlViewPage> {
   late ReportController controller;
+  late WebViewController webViewController;
 
   @override
   void initState() {
@@ -23,6 +24,9 @@ class _HtmlViewPageState extends State<HtmlViewPage> {
     controller = Get.isRegistered<ReportController>()
         ? Get.find<ReportController>()
         : Get.put<ReportController>(ReportController(), permanent: true);
+    webViewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadHtmlString(controller.htmlResponse.value);
   }
 
   @override
@@ -32,15 +36,8 @@ class _HtmlViewPageState extends State<HtmlViewPage> {
           title: const Text("Report"),
           titleSpacing: 0,
         ),
-        body: WebView(
-          initialUrl: 'about:blank',
-          onWebViewCreated: (WebViewController webViewController) {
-            webViewController.loadUrl(Uri.dataFromString(
-              controller.htmlResponse.value,
-              mimeType: 'text/html',
-              encoding: Encoding.getByName("utf-8"),
-            ).toString());
-          },
+        body: WebViewWidget(
+          controller: webViewController,
         ));
   }
 }

@@ -24,6 +24,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
+
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
@@ -35,10 +36,17 @@ android {
     compileSdkVersion 33
     ndkVersion flutter.ndkVersion
 
-//    compileOptions {
-//        sourceCompatibility JavaVersion.VERSION_1_8
-//        targetCompatibility JavaVersion.VERSION_1_8
-//    }
+    configurations.all {
+        resolutionStrategy {
+            force 'com.google.android.gms:play-services-measurement:20.1.2'
+            force 'com.google.android.gms:play-services-measurement-base:20.1.2'
+            force 'com.google.android.gms:play-services-measurement-api:20.1.2'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
     kotlinOptions {
         jvmTarget = '1.8'
@@ -83,3 +91,4 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.google.android.material:material:1.5.0-alpha01'
 }
+android.buildTypes.release.ndk.debugSymbolLevel = 'FULL'

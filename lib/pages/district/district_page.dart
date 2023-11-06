@@ -1,13 +1,11 @@
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:bhulekh_up/app_configs/app_asset.dart';
 import 'package:bhulekh_up/pages/district/controller/district_controller.dart';
 import 'package:bhulekh_up/pages/district/widgets/district_tile.dart';
-import 'package:bhulekh_up/widgets/app_error_widget.dart';
-import 'package:bhulekh_up/widgets/app_loader.dart';
-import 'package:bhulekh_up/widgets/sponsered_section.dart';
+import 'package:bhulekh_up/widgets/ad_mob_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class DistrictPage extends StatefulWidget {
   static const routeName = "/dashboard";
@@ -20,6 +18,7 @@ class DistrictPage extends StatefulWidget {
 
 class _DistrictPageState extends State<DistrictPage> {
   late DistrictController controller;
+  BannerAd? _banner;
 
   @override
   void initState() {
@@ -27,6 +26,7 @@ class _DistrictPageState extends State<DistrictPage> {
     controller = Get.isRegistered<DistrictController>()
         ? Get.find<DistrictController>()
         : Get.put<DistrictController>(DistrictController(), permanent: true);
+    _createBannerAd();
   }
 
   @override
@@ -35,10 +35,28 @@ class _DistrictPageState extends State<DistrictPage> {
     super.dispose();
   }
 
+  void _createBannerAd() {
+    _banner = BannerAd(
+        size: AdSize.banner,
+        adUnitId: AdMobService.bannerAdUnitId!,
+        listener: AdMobService.bannerAdListener,
+        request: const AdRequest(nonPersonalizedAds: false))
+      ..load();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: SponsoredSection(size: AdmobBannerSize.BANNER),
+      bottomNavigationBar: _banner == null
+          ? const SizedBox()
+          : Container(
+              height: 52,
+              width: Get.width,
+              margin: const EdgeInsets.only(bottom: 12),
+              child: AdWidget(
+                ad: _banner!,
+              ),
+            ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -89,31 +107,17 @@ class _DistrictPageState extends State<DistrictPage> {
             ),
             const SizedBox(height: 10),
             Center(
-              child: controller.obx(
-                (state) => state == null
-                    ? const Center(
-                        child: AppProgress(),
-                      )
-                    : ListView.separated(
-                        padding: EdgeInsets.zero,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) =>
-                            DistrictTile(state[index]),
-                        separatorBuilder: (context, index) => const Divider(),
-                        itemCount: state.length),
-                onLoading: const Center(child: AppProgress()),
-                onEmpty: const AppEmptyWidget(
-                  title: "No add-ons found",
-                ),
-                onError: (e) => AppErrorWidget(
-                  title: e.toString(),
-                  onRetry: () {
-                    controller.makeApiCall();
-                  },
-                ),
+              child: ListView.separated(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return DistrictTile(controller.districts[index]);
+                },
+                separatorBuilder: (context, index) => const Divider(),
+                itemCount: controller.districts.length,
               ),
-            )
+            ),
           ],
         ),
       ),

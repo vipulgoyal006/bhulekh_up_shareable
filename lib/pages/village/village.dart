@@ -1,15 +1,15 @@
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:bhulekh_up/app_configs/app_asset.dart';
 import 'package:bhulekh_up/data_models/district.dart';
 import 'package:bhulekh_up/data_models/tehsil.dart';
 import 'package:bhulekh_up/pages/khata_number/controller/fasil_controller.dart';
 import 'package:bhulekh_up/pages/village/controller/village_controller.dart';
 import 'package:bhulekh_up/pages/village/widget/village_tile.dart';
+import 'package:bhulekh_up/widgets/ad_mob_services.dart';
 import 'package:bhulekh_up/widgets/app_loader.dart';
-import 'package:bhulekh_up/widgets/sponsered_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class VillagePage extends StatefulWidget {
   static const routeName = "/villagePage";
@@ -25,6 +25,7 @@ class _VillagePageState extends State<VillagePage> {
   late District districtData;
   late Tehsil tehsilData;
   late FasliController fasliController;
+  BannerAd? _banner;
 
   @override
   void initState() {
@@ -42,12 +43,30 @@ class _VillagePageState extends State<VillagePage> {
         : Get.put(FasliController());
     controller.selectedTehsil = tehsilData;
     controller.getVillage();
+    _createBannerAd();
+  }
+
+  void _createBannerAd() {
+    _banner = BannerAd(
+        size: AdSize.banner,
+        adUnitId: AdMobService.bannerAdUnitId!,
+        listener: AdMobService.bannerAdListener,
+        request: const AdRequest())
+      ..load();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: SponsoredSection(size: AdmobBannerSize.BANNER),
+      bottomNavigationBar: _banner == null
+          ? const SizedBox()
+          : Container(
+              height: 52,
+              margin: const EdgeInsets.only(bottom: 12),
+              child: AdWidget(
+                ad: _banner!,
+              ),
+            ),
       body: SingleChildScrollView(
         child: Column(
           children: [
