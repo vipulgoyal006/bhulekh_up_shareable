@@ -1,7 +1,7 @@
 name: bhulekh_up
 description: A new Flutter project.
 publish_to: 'none'
-version: 1.0.0+2
+version: 1.0.1+3
 
 environment:
   sdk: '>=3.1.0 <4.0.0'
@@ -19,8 +19,14 @@ dependencies:
   intl: ^0.18.0
   http: ^1.1.0
   fluttertoast: ^8.0.8
-  webview_flutter: ^4.4.1
+  webview_flutter: ^4.2.2
   google_mobile_ads: ^3.1.0
+  google_ml_kit: ^0.16.1
+  screenshot: ^2.1.0
+  path_provider: ^2.0.11
+  permission_handler: ^10.0.0
+  open_filex: ^4.3.2
+
 
 dev_dependencies:
   flutter_test:

@@ -1,18 +1,34 @@
 import 'dart:developer';
 
 import 'package:bhulekh_up/data_models/khasra_num.dart';
-import 'package:bhulekh_up/pages/captcha/get_captcha.dart';
 import 'package:bhulekh_up/pages/khata_number/controller/fasil_controller.dart';
+import 'package:bhulekh_up/pages/khata_number/controller/khasraNum_controller.dart';
+import 'package:bhulekh_up/pages/khata_number/controller/khata_controller.dart';
+import 'package:bhulekh_up/pages/report_page/html_view_page.dart';
 import 'package:bhulekh_up/pages/tehsil/controller/tehsil_controller.dart';
 import 'package:bhulekh_up/pages/village/controller/village_controller.dart';
+import 'package:bhulekh_up/widgets/app_buttons/app_primary_button.dart';
+import 'package:dio/dio.dart' as dio;
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:screenshot/screenshot.dart';
 
 class CaptchaController extends GetxController {
-  RxString getCaptcha = RxString('');
+  RxString htmlResponse = RxString('');
   late TehsilController tehsilController;
   late VillageController villageController;
   late FasliController fasliController;
+  late KhasraNumController khasraNumController;
+  late KhataController khataController;
+  List<String> formattedCookies = [];
+  final GlobalKey<AppPrimaryButtonState> buttonKey = GlobalKey();
+  final GlobalKey<ScreenshotState> screenshotKey = GlobalKey<ScreenshotState>();
+  final TextEditingController captchacontroller = TextEditingController();
+  ScreenshotController screenshotController = ScreenshotController();
+  Uint8List? imageFile;
 
   @override
   void onInit() {
@@ -26,35 +42,133 @@ class CaptchaController extends GetxController {
     fasliController = Get.isRegistered<FasliController>()
         ? Get.find<FasliController>()
         : Get.put<FasliController>(FasliController(), permanent: true);
+    khasraNumController = Get.isRegistered<KhasraNumController>()
+        ? Get.find<KhasraNumController>()
+        : Get.put<KhasraNumController>(KhasraNumController(), permanent: true);
+    khataController = Get.isRegistered<KhataController>()
+        ? Get.find<KhataController>()
+        : Get.put<KhataController>(KhataController(), permanent: true);
+    getCookiesFromFirstApi();
   }
 
-  Future<void> fetchCaptchCode(KhasraNumRes data) async {
+  void getCookiesFromFirstApi() async {
+    final dio.Dio dioInstance = dio.Dio();
     try {
+      final response = await dioInstance.get('https://upbhulekh.gov.in/');
+
+      if (response.statusCode == 200) {
+        final headersMap = response.headers.map;
+
+        if (headersMap.containsKey('set-cookie')) {
+          final List<String>? cookies = headersMap['set-cookie'];
+
+          for (String cookie in cookies!) {
+            // Split the cookie string by semicolon
+            final cookieParts = cookie.split(';');
+            // Remove the 'Path' information
+            final formattedCookie = cookieParts
+                .where((part) => !part.trim().toLowerCase().startsWith('path='))
+                .join(';');
+            formattedCookies.add(formattedCookie);
+          }
+        } else {
+          print('No cookies found in the response headers.');
+        }
+      } else {
+        print(
+            'Request to the first API failed with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  Future<Uint8List> fetchImage() async {
+    final cookieHeaderValue = formattedCookies.join('; ');
+    final headers = {
+      'Cookie': cookieHeaderValue,
+    };
+    final response = await http.get(Uri.parse('https://upbhulekh.gov.in/ldcap'),
+        headers: headers);
+    if (response.statusCode == 200) {
+      return response.bodyBytes;
+    } else {
+      throw Exception('Failed to load image');
+    }
+  }
+
+  Future<void> captchaMatch() async {
+    final cookieHeaderValue = formattedCookies.join('; ');
+    final headers = {
+      'Cookie': cookieHeaderValue,
+    };
+    try {
+      buttonKey.currentState?.showLoader();
       final response = await http.post(
         Uri.parse(
-            'https://upbhulekh.gov.in/public/public_ror/action/capImage.jsp'),
+            'https://upbhulekh.gov.in/public/public_ror/action/captchamatch'),
         body: {
-          "khata_number": data.khataNumber,
+          "khata_number": khasraNumController.state?[0].khataNumber,
           "district_name": tehsilController.selectedDistrict.districtName,
           "district_code": tehsilController.selectedDistrict.districtCodeCensus,
           "tehsil_name": villageController.selectedTehsil.tehsilName,
           "tehsil_code": villageController.selectedTehsil.tehsilCodeCensus,
-          "village_name": fasliController.selectedVillage.vname,
-          "village_code": fasliController.selectedVillage.villageCodeCensus,
-          "pargana_name": fasliController.selectedVillage.pname,
-          "pargana_code": fasliController.selectedVillage.parganaCodeNew,
-          "fasli_code": fasliController.selectedFasliYear!.fasliYear,
-          "fasli_name": fasliController.selectedFasliYear!.fasliYear
+          "village_name": fasliController.selectedVillage?.vname,
+          "village_code": fasliController.selectedVillage?.villageCodeCensus,
+          "pargana_code": fasliController.selectedVillage?.parganaCodeNew,
+          "fasli_code": fasliController.selectedFasliYear?.fasliYear ?? "",
+          "fasli_name": fasliController.selectedFasliYear?.fasliYear ?? "",
+          "captcha": captchacontroller.text
         },
+        headers: headers,
       );
       if (response.statusCode == 200) {
-        getCaptcha.value = response.body;
-        Get.toNamed(EnterCaptchaPage.routeName);
-      } else {
-        getCaptcha.value = 'Failed to fetch data: ${response.statusCode}';
+        htmlResponse.value = response.body;
+        print("sjjsdh ${htmlResponse.value.toString()}");
+        if (htmlResponse.value.trim().contains("Captcha Not Matched")) {
+          Get.dialog(
+            SimpleDialog(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "captcha not matched",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 5),
+                    const Text(
+                      "कैप्चा मेल नहीं खाता",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: 60,
+                      height: 40,
+                      child: AppPrimaryButton(
+                        color: Color(0xFF355495),
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: const Text(
+                          "Ok",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          );
+        } else {
+          Get.toNamed(HtmlViewPage.routeName);
+        }
       }
     } catch (e, s) {
-      log("Error", error: e, stackTrace: s);
+      log("ERROR", error: e, stackTrace: s);
+    } finally {
+      buttonKey.currentState?.hideLoader();
     }
   }
 }

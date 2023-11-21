@@ -11,7 +11,7 @@ String villageToJson(List<Village> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Village {
-  String vname;
+  String? vname;
   String villageCodeCensus;
   String vnameEng;
   Pname? pname;

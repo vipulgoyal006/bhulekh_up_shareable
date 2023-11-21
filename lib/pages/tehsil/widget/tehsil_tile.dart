@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TehsilTile extends StatelessWidget {
-  TehsilTile(this.data, {Key? key, required this.districtData})
+  TehsilTile(this.data,
+      {Key? key, required this.districtData, required this.index})
       : super(key: key);
   final District districtData;
+  final int index;
   final Tehsil data;
   final controller = Get.put(VillageController());
 
@@ -23,20 +25,20 @@ class TehsilTile extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(16, 6, 16, 6),
         child: Row(
           children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "${data.tehsilName} (${data.tehsilNameEnglish})",
-                    style: const TextStyle(
-                        color: Color(0xff676F75), fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 4),
-                ],
-              ),
+            Text(
+              "(${index + 1})",
+              style: const TextStyle(
+                  color: Color(0xff676F75), fontWeight: FontWeight.bold),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 10),
+            Text(
+              "${data.tehsilName} (${data.tehsilNameEnglish})",
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                  color: Color(0xff676F75),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
+            ),
           ],
         ),
       ),

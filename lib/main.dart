@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bhulekh_up/app_configs/app_pages_routes.dart';
+import 'package:bhulekh_up/app_configs/app_theme.dart';
 import 'package:bhulekh_up/pages/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         title: 'UP Bhulekh',
         debugShowCheckedModeBanner: false,
         themeMode: ThemeMode.light,
+        theme: AppThemes.lightTheme,
         // localizationsDelegates: const [
         //   AppLocalizations.delegate,
         //   GlobalMaterialLocalizations.delegate,

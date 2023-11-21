@@ -13,6 +13,7 @@ mixin AppColors {
   static const appBarTextColor = Color(0xff130F26);
   static const gray = Color(0xffE2E2E2);
   static const ownChat = Color(0xFFE9E6EE);
+  static const primary = Color(0xFF355395);
 
   static const MaterialColor brightPrimary =
       MaterialColor(brightPrimaryValue, <int, Color>{

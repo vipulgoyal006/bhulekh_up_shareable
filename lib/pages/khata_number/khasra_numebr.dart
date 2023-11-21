@@ -1,5 +1,7 @@
+import 'package:bhulekh_up/app_configs/app_colors.dart';
 import 'package:bhulekh_up/pages/khata_number/controller/khasraNum_controller.dart';
 import 'package:bhulekh_up/pages/khata_number/widget/khasra_num_tile.dart';
+import 'package:bhulekh_up/widgets/app_buttons/app_back_button.dart';
 import 'package:bhulekh_up/widgets/app_error_widget.dart';
 import 'package:bhulekh_up/widgets/app_loader.dart';
 import 'package:flutter/material.dart';
@@ -28,16 +30,18 @@ class _KhasraNumberPageState extends State<KhasraNumberPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF355495),
-        leading: InkWell(
-          onTap: () {
+        backgroundColor: AppColors.primary,
+        leading: AppBackButton(
+          color: Colors.white,
+          onPressed: () {
             Get.back();
           },
-          child: const Icon(Icons.arrow_back_rounded, color: Colors.white),
         ),
         title: const Text(
           "Khata Number",
+          style: TextStyle(color: Colors.white),
         ),
+        titleSpacing: 0,
       ),
       body: SingleChildScrollView(
         child: controller.obx(

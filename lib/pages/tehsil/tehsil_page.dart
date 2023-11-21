@@ -1,9 +1,11 @@
 import 'package:bhulekh_up/app_configs/app_asset.dart';
+import 'package:bhulekh_up/app_configs/app_colors.dart';
 import 'package:bhulekh_up/data_models/district.dart';
 import 'package:bhulekh_up/data_models/tehsil.dart';
 import 'package:bhulekh_up/pages/tehsil/controller/tehsil_controller.dart';
 import 'package:bhulekh_up/pages/tehsil/widget/tehsil_tile.dart';
 import 'package:bhulekh_up/widgets/ad_mob_services.dart';
+import 'package:bhulekh_up/widgets/app_error_widget.dart';
 import 'package:bhulekh_up/widgets/app_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -141,12 +143,19 @@ class _TehsilPageState extends State<TehsilPage> {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) => TehsilTile(
-                            state[index],
-                            districtData: districtData),
-                        separatorBuilder: (context, index) => const Divider(),
+                              state[index],
+                              districtData: districtData,
+                              index: index,
+                            ),
+                        separatorBuilder: (context, index) =>
+                            Divider(color: AppColors.divider.withOpacity(0.3)),
                         itemCount: state.length),
                 onLoading: const Center(
                   child: AppProgress(),
+                ),
+                onError: (e) => AppErrorWidget(
+                  title: e ?? 'Some error occurred',
+                  onRetry: controller.getTehsil,
                 ),
               ),
             )

@@ -9,12 +9,14 @@ import 'package:http/http.dart' as http;
 class FasliController extends GetxController with StateMixin<List<FasliYear>> {
   FasliYear? selectedFasliYear;
   List<FasliYear>? fasilYearList;
-  late Village selectedVillage;
+  Village? selectedVillage;
 
   @override
   void onInit() {
     super.onInit();
-    getFasliYear();
+    getFasliYear().whenComplete(() {
+      if (fasilYearList!.isNotEmpty) selectedFasliYear = fasilYearList?[0];
+    });
   }
 
   onFasliYearSaved(FasliYear? newValue) {
@@ -23,7 +25,6 @@ class FasliController extends GetxController with StateMixin<List<FasliYear>> {
 
   Future<void> getFasliYear() async {
     try {
-      print("villageCode ${selectedVillage.villageCodeCensus}");
       change(null, status: RxStatus.loading());
       final url = Uri.parse(
           'https://upbhulekh.gov.in/public/public_ror/action/public_action.jsp');
@@ -31,7 +32,7 @@ class FasliController extends GetxController with StateMixin<List<FasliYear>> {
 
       formData.fields.addAll({
         "act": "fillfasliyear",
-        "village_code": selectedVillage.villageCodeCensus,
+        "village_code": selectedVillage?.villageCodeCensus ?? "",
       });
 
       final response = await formData.send();
@@ -40,13 +41,13 @@ class FasliController extends GetxController with StateMixin<List<FasliYear>> {
         final jsonData = json.decode(responseData);
         fasilYearList =
             List<FasliYear>.from(jsonData.map((x) => FasliYear.fromJson(x)));
+
         change(fasilYearList,
             status: fasilYearList!.isNotEmpty
                 ? RxStatus.success()
                 : RxStatus.empty());
-        print("Response $jsonData");
       } else {
-        print("API Error: ${response.statusCode}");
+        throw "Server Unreachable";
       }
     } catch (e, s) {
       log("Error", error: e, stackTrace: s);

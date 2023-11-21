@@ -187,7 +187,7 @@ class _SearchKhataNumberState extends State<SearchKhataNumber> {
                                     fontSize: 20, color: Colors.white),
                               ),
                               Text(
-                                villageData.vname,
+                                villageData.vname ?? "",
                                 style: const TextStyle(
                                     fontSize: 20, color: Colors.white),
                               ),
@@ -321,7 +321,10 @@ class _SearchKhataNumberState extends State<SearchKhataNumber> {
                                   khasraNumController.getKhataNumberByKsrNbr();
                                 }
                               },
-                              child: const Text("खोजें"),
+                              child: const Text(
+                                "खोजें",
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
                           ),
                         ],
@@ -358,7 +361,10 @@ class _SearchKhataNumberState extends State<SearchKhataNumber> {
                                   khataController.enterKhataNumber();
                                 }
                               },
-                              child: const Text("खोजें"),
+                              child: const Text(
+                                "खोजें",
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
                           ),
                         ],
@@ -394,7 +400,10 @@ class _SearchKhataNumberState extends State<SearchKhataNumber> {
                                   khataController.getKhataNumberByName();
                                 }
                               },
-                              child: const Text("खोजें"),
+                              child: const Text(
+                                "खोजें",
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
                           ),
                         ],
@@ -547,7 +556,10 @@ class _SearchKhataNumberState extends State<SearchKhataNumber> {
                                   ],
                                 ));
                               },
-                              child: const Text("खोजें"),
+                              child: const Text(
+                                "खोजें",
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
                           ),
                         ],

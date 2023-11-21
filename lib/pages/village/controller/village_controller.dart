@@ -15,7 +15,6 @@ class VillageController extends GetxController with StateMixin<List<Village>> {
   late List<FasliYear> fasliYear;
   late Tehsil selectedTehsil;
   late TehsilController tehsilController;
-  late FasliController fasliController;
   InterstitialAd? _interstitialAd;
 
   @override
@@ -24,9 +23,6 @@ class VillageController extends GetxController with StateMixin<List<Village>> {
     tehsilController = Get.isRegistered<TehsilController>()
         ? Get.find<TehsilController>()
         : Get.put<TehsilController>(TehsilController(), permanent: true);
-    fasliController = Get.isRegistered<FasliController>()
-        ? Get.find<FasliController>()
-        : Get.put(FasliController());
   }
 
   void showInterstitialAd() {
@@ -76,7 +72,7 @@ class VillageController extends GetxController with StateMixin<List<Village>> {
         change(users,
             status: users.isEmpty ? RxStatus.empty() : RxStatus.success());
       } else {
-        print("API Error: ${response.statusCode}");
+        throw "Server Unreachable";
       }
     } catch (e, s) {
       log("Error", error: e, stackTrace: s);

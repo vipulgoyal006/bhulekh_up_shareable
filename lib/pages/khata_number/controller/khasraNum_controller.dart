@@ -39,6 +39,7 @@ class KhasraNumController extends GetxController
   Future<void> getKhataNumberByKsrNbr() async {
     try {
       buttonKey.currentState?.showLoader();
+
       final url = Uri.parse(
           'https://upbhulekh.gov.in/public/public_ror/action/public_action.jsp');
       final formData = http.MultipartRequest('POST', url);
@@ -46,7 +47,7 @@ class KhasraNumController extends GetxController
       formData.fields.addAll({
         "kcn": kcnTextController.text,
         "act": "sbksn",
-        "vcc": fasliController.selectedVillage.villageCodeCensus,
+        "vcc": fasliController.selectedVillage?.villageCodeCensus ?? "",
         "fasli-code-value": fasliController.selectedFasliYear!.fasliYear,
         "fasli-name-value": fasliController.selectedFasliYear!.fasliYear,
       });
@@ -101,7 +102,7 @@ class KhasraNumController extends GetxController
           // );
         }
       } else {
-        print("Error: ${response.statusCode}");
+        throw "Server Unreachable";
       }
     } catch (e, s) {
       log("Error", error: e, stackTrace: s);

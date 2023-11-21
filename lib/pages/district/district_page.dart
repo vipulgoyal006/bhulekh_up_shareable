@@ -1,4 +1,5 @@
 import 'package:bhulekh_up/app_configs/app_asset.dart';
+import 'package:bhulekh_up/app_configs/app_colors.dart';
 import 'package:bhulekh_up/pages/district/controller/district_controller.dart';
 import 'package:bhulekh_up/pages/district/widgets/district_tile.dart';
 import 'package:bhulekh_up/widgets/ad_mob_services.dart';
@@ -112,9 +113,13 @@ class _DistrictPageState extends State<DistrictPage> {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
-                  return DistrictTile(controller.districts[index]);
+                  return DistrictTile(
+                    controller.districts[index],
+                    index: index,
+                  );
                 },
-                separatorBuilder: (context, index) => const Divider(),
+                separatorBuilder: (context, index) =>
+                    Divider(color: AppColors.divider.withOpacity(0.3)),
                 itemCount: controller.districts.length,
               ),
             ),

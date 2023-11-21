@@ -37,6 +37,7 @@ class TehsilController extends GetxController with StateMixin<List<Tehsil>> {
             status: users.isEmpty ? RxStatus.empty() : RxStatus.success());
       } else {
         print("API Error: ${response.statusCode}");
+        throw "Server Unreachable";
       }
     } catch (e, s) {
       log("error", error: e, stackTrace: s);

@@ -53,7 +53,7 @@ class KhataController extends GetxController with StateMixin<List<KhataName>> {
       formData.fields.addAll({
         "name": nameController.text,
         "act": "sbname",
-        "vcc": fasliController.selectedVillage.villageCodeCensus,
+        "vcc": fasliController.selectedVillage?.villageCodeCensus ?? "",
         "fasli-code-value": fasliController.selectedFasliYear!.fasliYear,
         "fasli-name-value": fasliController.selectedFasliYear!.fasliYear,
       });
@@ -131,7 +131,7 @@ class KhataController extends GetxController with StateMixin<List<KhataName>> {
       formData.fields.addAll({
         "acn": result,
         "act": "sbacn",
-        "vcc": fasliController.selectedVillage.villageCodeCensus,
+        "vcc": fasliController.selectedVillage?.villageCodeCensus ?? "",
         "fasli-code-value": fasliController.selectedFasliYear!.fasliYear,
         "fasli-name-value": fasliController.selectedFasliYear!.fasliYear,
       });

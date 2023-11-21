@@ -39,8 +39,8 @@ class ReportController extends GetxController {
         'district_code': tehsilController.selectedDistrict.districtCodeCensus,
         'tehsil_name': villageController.selectedTehsil.tehsilName,
         'tehsil_code': villageController.selectedTehsil.tehsilCodeCensus,
-        'village_name': fasliController.selectedVillage.vname,
-        'village_code': fasliController.selectedVillage.villageCodeCensus,
+        'village_name': fasliController.selectedVillage?.vname,
+        'village_code': fasliController.selectedVillage?.villageCodeCensus,
         'fasli_code': fasliController.selectedFasliYear!.fasliYear,
       },
     );
@@ -96,8 +96,8 @@ class ReportController extends GetxController {
         'district_code': tehsilController.selectedDistrict.districtCodeCensus,
         'tehsil_name': villageController.selectedTehsil.tehsilName,
         'tehsil_code': villageController.selectedTehsil.tehsilCodeCensus,
-        'village_name': fasliController.selectedVillage.vname,
-        'village_code': fasliController.selectedVillage.villageCodeCensus,
+        'village_name': fasliController.selectedVillage?.vname,
+        'village_code': fasliController.selectedVillage?.villageCodeCensus,
         'fasli_code': fasliController.selectedFasliYear!.fasliYear,
       },
     );

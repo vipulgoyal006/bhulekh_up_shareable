@@ -1,4 +1,5 @@
 import 'package:bhulekh_up/app_configs/app_asset.dart';
+import 'package:bhulekh_up/app_configs/app_colors.dart';
 import 'package:bhulekh_up/data_models/district.dart';
 import 'package:bhulekh_up/data_models/tehsil.dart';
 import 'package:bhulekh_up/pages/khata_number/controller/fasil_controller.dart';
@@ -51,7 +52,7 @@ class _VillagePageState extends State<VillagePage> {
         size: AdSize.banner,
         adUnitId: AdMobService.bannerAdUnitId!,
         listener: AdMobService.bannerAdListener,
-        request: const AdRequest())
+        request: const AdRequest(nonPersonalizedAds: false))
       ..load();
   }
 
@@ -146,9 +147,14 @@ class _VillagePageState extends State<VillagePage> {
                       padding: EdgeInsets.zero,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) => VillageTile(state[index],
-                          districtData: districtData, tehsilData: tehsilData),
-                      separatorBuilder: (context, index) => const Divider(),
+                      itemBuilder: (context, index) => VillageTile(
+                            state[index],
+                            districtData: districtData,
+                            tehsilData: tehsilData,
+                            index: index,
+                          ),
+                      separatorBuilder: (context, index) =>
+                          Divider(color: AppColors.divider.withOpacity(0.3)),
                       itemCount: state.length),
               onLoading: const Center(
                 child: AppProgress(),
