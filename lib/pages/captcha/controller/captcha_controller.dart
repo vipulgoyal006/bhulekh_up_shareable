@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:bhulekh_up/data_models/khasra_num.dart';
 import 'package:bhulekh_up/pages/khata_number/controller/fasil_controller.dart';
@@ -12,8 +13,10 @@ import 'package:dio/dio.dart' as dio;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_html_to_pdf/flutter_html_to_pdf.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 
 class CaptchaController extends GetxController {
@@ -29,6 +32,13 @@ class CaptchaController extends GetxController {
   final TextEditingController captchacontroller = TextEditingController();
   ScreenshotController screenshotController = ScreenshotController();
   Uint8List? imageFile;
+
+  @override
+  void dispose() {
+    super.dispose();
+    captchacontroller.dispose();
+    Get.delete<ScreenshotController>();
+  }
 
   @override
   void onInit() {
@@ -51,6 +61,37 @@ class CaptchaController extends GetxController {
     getCookiesFromFirstApi();
   }
 
+  convert() async {
+    // Name is File Name that you want to give the file
+    var targetPath = await _localPath;
+    var targetFileName =
+        "Khata_report${DateTime.now().millisecondsSinceEpoch}.pdf";
+
+    var generatedPdfFile = await FlutterHtmlToPdf.convertFromHtmlContent(
+        htmlResponse.value, targetPath!, targetFileName);
+    ScaffoldMessenger.of(Get.context!).showSnackBar(SnackBar(
+      content: Text(generatedPdfFile.toString()),
+    ));
+  }
+
+  Future<String?> get _localPath async {
+    Directory? directory;
+    try {
+      if (Platform.isIOS) {
+        directory = await getApplicationSupportDirectory();
+      } else {
+        // if platform is android
+        directory = Directory('/storage/emulated/0/Download');
+        if (!await directory.exists()) {
+          directory = await getExternalStorageDirectory();
+        }
+      }
+    } catch (err, stack) {
+      print("Can-not get download folder path");
+    }
+    return directory?.path;
+  }
+
   void getCookiesFromFirstApi() async {
     final dio.Dio dioInstance = dio.Dio();
     try {
@@ -63,9 +104,7 @@ class CaptchaController extends GetxController {
           final List<String>? cookies = headersMap['set-cookie'];
 
           for (String cookie in cookies!) {
-            // Split the cookie string by semicolon
             final cookieParts = cookie.split(';');
-            // Remove the 'Path' information
             final formattedCookie = cookieParts
                 .where((part) => !part.trim().toLowerCase().startsWith('path='))
                 .join(';');

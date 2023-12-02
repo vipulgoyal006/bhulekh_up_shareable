@@ -14,6 +14,7 @@ class FasliController extends GetxController with StateMixin<List<FasliYear>> {
   @override
   void onInit() {
     super.onInit();
+
     getFasliYear().whenComplete(() {
       if (fasilYearList!.isNotEmpty) selectedFasliYear = fasilYearList?[0];
     });

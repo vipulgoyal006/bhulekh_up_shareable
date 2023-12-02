@@ -2,7 +2,6 @@ import 'package:bhulekh_up/app_configs/app_asset.dart';
 import 'package:bhulekh_up/app_configs/app_colors.dart';
 import 'package:bhulekh_up/pages/district/controller/district_controller.dart';
 import 'package:bhulekh_up/pages/district/widgets/district_tile.dart';
-import 'package:bhulekh_up/widgets/ad_mob_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -19,7 +18,6 @@ class DistrictPage extends StatefulWidget {
 
 class _DistrictPageState extends State<DistrictPage> {
   late DistrictController controller;
-  BannerAd? _banner;
 
   @override
   void initState() {
@@ -27,7 +25,7 @@ class _DistrictPageState extends State<DistrictPage> {
     controller = Get.isRegistered<DistrictController>()
         ? Get.find<DistrictController>()
         : Get.put<DistrictController>(DistrictController(), permanent: true);
-    _createBannerAd();
+    controller.createBannerAd();
   }
 
   @override
@@ -36,26 +34,17 @@ class _DistrictPageState extends State<DistrictPage> {
     super.dispose();
   }
 
-  void _createBannerAd() {
-    _banner = BannerAd(
-        size: AdSize.banner,
-        adUnitId: AdMobService.bannerAdUnitId!,
-        listener: AdMobService.bannerAdListener,
-        request: const AdRequest(nonPersonalizedAds: false))
-      ..load();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: _banner == null
+      bottomNavigationBar: controller.banner == null
           ? const SizedBox()
           : Container(
               height: 52,
               width: Get.width,
               margin: const EdgeInsets.only(bottom: 12),
               child: AdWidget(
-                ad: _banner!,
+                ad: controller.banner!,
               ),
             ),
       body: SingleChildScrollView(

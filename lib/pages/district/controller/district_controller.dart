@@ -1,13 +1,16 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:bhulekh_up/data_models/district.dart';
+import 'package:bhulekh_up/widgets/ad_mob_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 
 class DistrictController extends GetxController {
   late ScrollController scrollController;
   OverlayEntry? overlayEntry;
+  BannerAd? banner;
 
   final List<District> districts = [
     District(
@@ -320,6 +323,14 @@ class DistrictController extends GetxController {
     // makeApiCall();
   }
 
+  void createBannerAd() {
+    banner = BannerAd(
+        size: AdSize.banner,
+        adUnitId: AdMobService.bannerAdUnitId!,
+        listener: AdMobService.bannerAdListener,
+        request: const AdRequest(nonPersonalizedAds: false))
+      ..load();
+  }
   // Future<void> makeApiCall() async {
   //   try {
   //     change(null, status: RxStatus.loading());

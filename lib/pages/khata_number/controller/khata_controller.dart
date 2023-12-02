@@ -100,12 +100,15 @@ class KhataController extends GetxController with StateMixin<List<KhataName>> {
         } else {
           Get.toNamed(KhataNumberPage.routeName);
         }
-      } else {
-        print("Error: ${response.statusCode}");
-      }
+      } else {}
     } catch (e, s) {
       log("Error", error: e, stackTrace: s);
-      change(null, status: RxStatus.error(e.toString()));
+      change(
+        null,
+        status: RxStatus.error(
+          e.toString(),
+        ),
+      );
     } finally {
       buttonKey2.currentState?.hideLoader();
     }

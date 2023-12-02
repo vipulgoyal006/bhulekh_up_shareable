@@ -1,18 +1,16 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:bhulekh_up/data_models/district.dart';
+import 'package:bhulekh_up/data_models/rest_error.dart';
 import 'package:bhulekh_up/data_models/tehsil.dart';
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class TehsilController extends GetxController with StateMixin<List<Tehsil>> {
   late District selectedDistrict;
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
   Future<void> getTehsil() async {
     try {
@@ -36,12 +34,23 @@ class TehsilController extends GetxController with StateMixin<List<Tehsil>> {
         change(users,
             status: users.isEmpty ? RxStatus.empty() : RxStatus.success());
       } else {
-        print("API Error: ${response.statusCode}");
         throw "Server Unreachable";
       }
-    } catch (e, s) {
-      log("error", error: e, stackTrace: s);
+    } on SocketException catch (e) {
+      throw NoInternetError();
+    } catch (e) {
       change(null, status: RxStatus.error(e.toString()));
+      if (e is DioError) {
+        if (e.response!.statusCode == 500) {
+          throw 'Server unreachable';
+        } else {
+          final restError = RestError.fromJson(e.response!.data);
+          if (restError.code == 401) {}
+          throw restError;
+        }
+      } else {
+        throw e.toString();
+      }
     }
   }
 }

@@ -1,7 +1,6 @@
 import 'package:bhulekh_up/data_models/khataName.dart';
 import 'package:bhulekh_up/pages/captcha/get_captcha.dart';
 import 'package:bhulekh_up/pages/khata_number/controller/khata_controller.dart';
-import 'package:bhulekh_up/pages/report_page/controller/report_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

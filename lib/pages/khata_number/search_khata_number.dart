@@ -63,12 +63,6 @@ class _SearchKhataNumberState extends State<SearchKhataNumber> {
     _showInterstitialAd();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    Get.delete<FasliController>(force: true);
-  }
-
   void _createBannerAd() {
     _banner = BannerAd(
         size: AdSize.banner,

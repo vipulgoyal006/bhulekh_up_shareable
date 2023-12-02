@@ -1,15 +1,13 @@
 import 'package:bhulekh_up/data_models/district.dart';
-import 'package:bhulekh_up/pages/tehsil/controller/tehsil_controller.dart';
 import 'package:bhulekh_up/pages/tehsil/tehsil_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DistrictTile extends StatelessWidget {
-  DistrictTile(this.districtData, {Key? key, required this.index})
+  const DistrictTile(this.districtData, {Key? key, required this.index})
       : super(key: key);
   final District districtData;
   final int index;
-  final controller = Get.put(TehsilController());
 
   @override
   Widget build(BuildContext context) {

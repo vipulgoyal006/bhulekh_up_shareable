@@ -27,6 +27,7 @@ class HtmlViewPage extends StatefulWidget {
 class _HtmlViewPageState extends State<HtmlViewPage> {
   late CaptchaController controller;
   late WebViewController webViewController;
+
   @override
   void initState() {
     super.initState();
@@ -45,36 +46,10 @@ class _HtmlViewPageState extends State<HtmlViewPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,
         onPressed: () async {
-          PermissionStatus statuses = await Permission.storage.request();
-          if (statuses.isGranted) {
-            controller.screenshotController
-                .capture(pixelRatio: 2)
-                .then((image) async {
-              setState(() {
-                controller.imageFile = image;
-              });
-              final Directory directory = await getTemporaryDirectory();
-              const fileName = "Khata_Report.jpeg";
-              // final fileName =
-              //     "${controller.userController.state?.storeDetails?.storeName ?? ''} qr.png";
-              const String filePath = "/storage/emulated/0/Download";
-              controller.screenshotController
-                  .captureAndSave(filePath, fileName: fileName)
-                  .then((value) {
-                showAppAlertDialog(
-                        title: "Report Code Downloaded",
-                        description: "Your Image is saved to $fileName",
-                        positiveText: "View")
-                    .then((value) {
-                  if (value == true) {
-                    OpenFilex.open(filePath + "/" + fileName);
-                  }
-                });
-              });
-              // print("dkdkdkkd${controller.imageFile}");
-            }).catchError((onError) {
-              print("ERROR ${onError}");
-            });
+          // PermissionStatus statuses =
+          //     await Permission.storage.request();
+          if (true) {
+            controller.convert();
           }
         },
         child: const Icon(
@@ -87,7 +62,7 @@ class _HtmlViewPageState extends State<HtmlViewPage> {
         leading: AppBackButton(
           color: Colors.white,
           onPressed: () {
-            Get.offAllNamed(SearchKhataNumber.routeName);
+            Get.offAllNamed(DistrictPage.routeName);
           },
         ),
         title: const Text(

@@ -1,9 +1,7 @@
 import 'package:bhulekh_up/data_models/district.dart';
 import 'package:bhulekh_up/data_models/tehsil.dart';
 import 'package:bhulekh_up/data_models/village.dart';
-import 'package:bhulekh_up/pages/khata_number/controller/fasil_controller.dart';
 import 'package:bhulekh_up/pages/khata_number/search_khata_number.dart';
-import 'package:bhulekh_up/pages/village/controller/village_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,8 +17,6 @@ class VillageTile extends StatelessWidget {
   final int index;
   final District districtData;
   final Tehsil tehsilData;
-  final controller = Get.put(VillageController());
-  final fasliController = Get.put(FasliController());
 
   @override
   Widget build(BuildContext context) {
