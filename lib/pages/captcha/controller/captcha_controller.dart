@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:bhulekh_up/data_models/khasra_num.dart';
 import 'package:bhulekh_up/pages/khata_number/controller/fasil_controller.dart';
 import 'package:bhulekh_up/pages/khata_number/controller/khasraNum_controller.dart';
 import 'package:bhulekh_up/pages/khata_number/controller/khata_controller.dart';
@@ -17,7 +16,6 @@ import 'package:flutter_html_to_pdf/flutter_html_to_pdf.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
-import 'package:screenshot/screenshot.dart';
 
 class CaptchaController extends GetxController {
   RxString htmlResponse = RxString('');
@@ -28,16 +26,13 @@ class CaptchaController extends GetxController {
   late KhataController khataController;
   List<String> formattedCookies = [];
   final GlobalKey<AppPrimaryButtonState> buttonKey = GlobalKey();
-  final GlobalKey<ScreenshotState> screenshotKey = GlobalKey<ScreenshotState>();
   final TextEditingController captchacontroller = TextEditingController();
-  ScreenshotController screenshotController = ScreenshotController();
   Uint8List? imageFile;
 
   @override
   void dispose() {
     super.dispose();
     captchacontroller.dispose();
-    Get.delete<ScreenshotController>();
   }
 
   @override

@@ -1,18 +1,10 @@
-import 'dart:io';
-
 import 'package:bhulekh_up/app_configs/app_colors.dart';
 import 'package:bhulekh_up/pages/captcha/controller/captcha_controller.dart';
 import 'package:bhulekh_up/pages/district/district_page.dart';
-import 'package:bhulekh_up/pages/khata_number/search_khata_number.dart';
-import 'package:bhulekh_up/widgets/alert_dialog.dart';
 import 'package:bhulekh_up/widgets/app_buttons/app_back_button.dart';
 import 'package:bhulekh_up/widgets/app_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:open_filex/open_filex.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class HtmlViewPage extends StatefulWidget {
@@ -73,11 +65,8 @@ class _HtmlViewPageState extends State<HtmlViewPage> {
       ),
       body: controller.htmlResponse.isEmpty == true
           ? const AppProgress()
-          : Screenshot(
-              controller: controller.screenshotController,
-              child: WebViewWidget(
-                controller: webViewController,
-              ),
+          : WebViewWidget(
+              controller: webViewController,
             ),
     );
   }
