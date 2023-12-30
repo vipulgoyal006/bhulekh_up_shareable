@@ -8,19 +8,19 @@ class AdMobService {
     if (Platform.isAndroid) {
       return 'ca-app-pub-2451593635555466/2312067092';
     } else if (Platform.isIOS) {
-      return 'ca-app-pub-2451593635555466/2312067092';
+      return 'ca-app-pub-2451593635555466/9700111648';
     }
     return null;
   }
 
-  static String? get interstitialUnitAdId {
-    if (Platform.isAndroid) {
-      return 'ca-app-pub-2451593635555466/3655872694';
-    } else if (Platform.isIOS) {
-      return 'ca-app-pub-2451593635555466/3655872694';
-    }
-    return null;
-  }
+  // static String? get interstitialUnitAdId {
+  //   if (Platform.isAndroid) {
+  //     return 'ca-app-pub-2451593635555466/3655872694';
+  //   } else if (Platform.isIOS) {
+  //     return 'ca-app-pub-2451593635555466/3655872694';
+  //   }
+  //   return null;
+  // }
 
   static final BannerAdListener bannerAdListener = BannerAdListener(
       onAdLoaded: (ad) => debugPrint("Ad Loaded."),

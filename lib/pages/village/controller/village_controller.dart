@@ -25,29 +25,29 @@ class VillageController extends GetxController with StateMixin<List<Village>> {
         : Get.put<TehsilController>(TehsilController(), permanent: true);
   }
 
-  void showInterstitialAd() {
-    if (_interstitialAd != null) {
-      _interstitialAd!.fullScreenContentCallback =
-          FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
-        ad.dispose();
-        _createInterstitialAd();
-      }, onAdFailedToShowFullScreenContent: (ad, error) {
-        ad.dispose();
-        _createInterstitialAd();
-      });
-      _interstitialAd!.show();
-      _interstitialAd = null;
-    }
-  }
+  // void showInterstitialAd() {
+  //   if (_interstitialAd != null) {
+  //     _interstitialAd!.fullScreenContentCallback =
+  //         FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
+  //       ad.dispose();
+  //       _createInterstitialAd();
+  //     }, onAdFailedToShowFullScreenContent: (ad, error) {
+  //       ad.dispose();
+  //       _createInterstitialAd();
+  //     });
+  //     _interstitialAd!.show();
+  //     _interstitialAd = null;
+  //   }
+  // }
 
-  void _createInterstitialAd() {
-    InterstitialAd.load(
-        adUnitId: AdMobService.interstitialUnitAdId!,
-        request: const AdRequest(),
-        adLoadCallback: InterstitialAdLoadCallback(
-            onAdLoaded: (ad) => _interstitialAd = ad,
-            onAdFailedToLoad: (LoadAdError error) => _interstitialAd = null));
-  }
+  // void _createInterstitialAd() {
+  //   InterstitialAd.load(
+  //       adUnitId: AdMobService.interstitialUnitAdId!,
+  //       request: const AdRequest(),
+  //       adLoadCallback: InterstitialAdLoadCallback(
+  //           onAdLoaded: (ad) => _interstitialAd = ad,
+  //           onAdFailedToLoad: (LoadAdError error) => _interstitialAd = null));
+  // }
 
   Future<void> getVillage() async {
     try {

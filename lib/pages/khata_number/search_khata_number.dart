@@ -60,7 +60,7 @@ class _SearchKhataNumberState extends State<SearchKhataNumber> {
     fasliController.selectedVillage = villageData;
     fasliController.getFasliYear();
     _createBannerAd();
-    _showInterstitialAd();
+    // _showInterstitialAd();
   }
 
   void _createBannerAd() {
@@ -72,29 +72,29 @@ class _SearchKhataNumberState extends State<SearchKhataNumber> {
       ..load();
   }
 
-  void _createInterstitialAd() {
-    InterstitialAd.load(
-        adUnitId: AdMobService.interstitialUnitAdId!,
-        request: const AdRequest(),
-        adLoadCallback: InterstitialAdLoadCallback(
-            onAdLoaded: (ad) => _interstitialAd = ad,
-            onAdFailedToLoad: (LoadAdError error) => _interstitialAd = null));
-  }
+  // void _createInterstitialAd() {
+  //   InterstitialAd.load(
+  //       adUnitId: AdMobService.interstitialUnitAdId!,
+  //       request: const AdRequest(),
+  //       adLoadCallback: InterstitialAdLoadCallback(
+  //           onAdLoaded: (ad) => _interstitialAd = ad,
+  //           onAdFailedToLoad: (LoadAdError error) => _interstitialAd = null));
+  // }
 
-  void _showInterstitialAd() {
-    if (_interstitialAd != null) {
-      _interstitialAd!.fullScreenContentCallback =
-          FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
-        ad.dispose();
-        _createInterstitialAd();
-      }, onAdFailedToShowFullScreenContent: (ad, error) {
-        ad.dispose();
-        _createInterstitialAd();
-      });
-      _interstitialAd!.show();
-      _interstitialAd = null;
-    }
-  }
+  // void _showInterstitialAd() {
+  //   if (_interstitialAd != null) {
+  //     _interstitialAd!.fullScreenContentCallback =
+  //         FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
+  //       ad.dispose();
+  //       _createInterstitialAd();
+  //     }, onAdFailedToShowFullScreenContent: (ad, error) {
+  //       ad.dispose();
+  //       _createInterstitialAd();
+  //     });
+  //     _interstitialAd!.show();
+  //     _interstitialAd = null;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
