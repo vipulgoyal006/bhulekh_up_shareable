@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyA6XcBIJt9mdozELp_B9r0jPNyI7xw31bk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>80182142639</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.clovenandworks.bhulekhUp</string>
+	<key>PROJECT_ID</key>
+	<string>up-bhulekh-ios</string>
+	<key>STORAGE_BUCKET</key>
+	<string>up-bhulekh-ios.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:80182142639:ios:3067b283d6a13e44ac565a</string>
+</dict>
+</plist>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "80182142639",
+    "project_id": "up-bhulekh-ios",
+    "storage_bucket": "up-bhulekh-ios.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:80182142639:android:4180e0a7fd6ccee6ac565a",
+        "android_client_info": {
+          "package_name": "com.bhulekh_up"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuJxPDMajuEbbHXb-1wCETOntvAe6YfPA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
